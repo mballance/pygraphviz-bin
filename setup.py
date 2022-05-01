@@ -2,6 +2,7 @@
 #* setup.py for libvsc
 #****************************************************************************
 import os
+import stat
 import subprocess
 import shutil
 import sysconfig
