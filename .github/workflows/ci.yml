@@ -20,7 +20,7 @@ jobs:
           ls /opt/python/${{ matrix.python-abi }}/bin
           /opt/python/${{ matrix.python-abi }}/bin/python \
             -m pip install --upgrade \
-            pip setuptools wheel build cython twine
+            pip setuptools wheel build cython twine auditwheel
           yum install -y wget
       - name: Fetch GraphViz sources
         run: |
@@ -44,6 +44,8 @@ jobs:
           /opt/python/${{ matrix.python-abi }}/bin/python \
             setup.py \
             bdist_wheel
+          /opt/python/${{ matrix.python-abi }}/bin/auditwheel show dist/*.whl
+          /opt/python/${{ matrix.python-abi }}/bin/auditwheel repair dist/*.whl
       - name: Publish to PyPi
         if: startsWith(github.ref, 'refs/heads/main')
         uses: pypa/gh-action-pypi-publish@release/v1
