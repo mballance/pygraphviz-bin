@@ -12,6 +12,7 @@ from distutils.command.build_clib import build_clib
 from distutils.ccompiler import new_compiler
 from distutils.spawn import find_executable
 from setuptools.command.build_ext import build_ext as _build_ext
+from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
 from setuptools.command.install import install
 from distutils.file_util import copy_file
 
@@ -34,6 +35,12 @@ class InstallCmd(install):
         st = os.stat(dot)
         os.chmod(dot, st.st_mode | stat.S_IEXEC)
 
+class BdistWheel(_bdist_wheel):
+
+    def finalize_options(self):
+        _bdist_wheel.finalize_options(self)
+        self.root_is_pure = False
+
 setup(
   name="pygraphviz-bin",
   version=version,
@@ -52,7 +59,9 @@ setup(
     'setuptools_scm',
     'cython'
   ],
-  cmdclass={ 'install': InstallCmd}
+  cmdclass={
+      'install': InstallCmd,
+      'bdist_wheel': BdistWheel}
 )
 
 
