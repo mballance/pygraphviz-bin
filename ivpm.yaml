@@ -1,0 +1,11 @@
+
+package:
+  name: pygraphviz-bin
+
+  dep-sets:
+  - name: default
+    deps: []
+
+  - name: default-dev
+    deps: []
+

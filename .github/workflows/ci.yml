@@ -18,7 +18,9 @@ jobs:
           ls /opt/python/${{ matrix.python-abi }}
           find /opt/python/${{ matrix.python-abi }} -type f
           ls /opt/python/${{ matrix.python-abi }}/bin
-          /opt/python/${{ matrix.python-abi }}/bin/python -m pip install --upgrade pip setuptools wheel build cython
+          /opt/python/${{ matrix.python-abi }}/bin/python \
+            -m pip install --upgrade \
+            pip setuptools wheel build cython twine
           yum install -y wget
       - name: Fetch GraphViz sources
         run: |
@@ -34,5 +36,18 @@ jobs:
           ls -l inst/bin/dot_static
           strip inst/bin/dot_static
           ls -l inst/bin/dot_static
+          mkdir -p ../src/graphviz_bin/bin
+          cp inst_bin/dot_static ../src/graphviz_bin/bin/dot
+      - name: Wheel build
+        run: |
+          /opt/python/${{ matrix.python-abi }}/bin/python \
+            setup.py \
+            bdist_wheel
+      - name: Publish to PyPi
+        if: startsWith(github.ref, 'refs/heads/main')
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
 
 
