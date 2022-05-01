@@ -18,6 +18,11 @@ from distutils.file_util import copy_file
 _DEBUG = False
 _DEBUG_LEVEL = 0
 
+version="0.0.1"
+
+if "BUILD_NUM" in os.environ.keys():
+    version += "." + os.environ["BUILD_NUM"]
+
 class InstallCmd(install):
     def run(self):
         install.run(self)
@@ -30,7 +35,8 @@ class InstallCmd(install):
         os.chmod(dot, st.st_mode | stat.S_IEXEC)
 
 setup(
-  name = "pygraphviz-bin",
+  name="pygraphviz-bin",
+  version=version,
   packages=['graphviz_bin'],
   package_dir = {'' : 'src'},
   package_data = {'graphviz_bin' : [ 'bin/*' ]},

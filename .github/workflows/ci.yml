@@ -40,6 +40,7 @@ jobs:
           cp inst/bin/dot_static ../src/graphviz_bin/bin/dot
       - name: Wheel build
         run: |
+          export BUILD_NUM=$GITHUB_RUN_ID
           /opt/python/${{ matrix.python-abi }}/bin/python \
             setup.py \
             bdist_wheel
