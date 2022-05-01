@@ -1,0 +1,32 @@
+
+name: pygraphviz
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  manylinux2020_x86_64:
+    runs-on: ubuntu-latest
+    container: quay.io/pypa/manylinux2010_x86_64
+    strategy:
+      matrix:
+        python-abi: [cp36-36m, cp37-37m, cp38-cp38, cp39-39]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install build dependencies
+        run: |
+          /opt/python/${{ matrix.python-abi }}/bin/pip install --upgrade pip setuptools wheel build cython
+      - name: Fetch GraphViz sources
+        run: |
+          wget https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/3.0.0/graphviz-3.0.0.tar.gz
+      - name: Configure and build
+        run: |
+          tar xvzf graphviz-3.0.0.tar.gz
+          cd graphviz-3.0.0
+          ./configure --prefix=`pwd`/inst \
+            --enable-static --disable-shared
+          make
+          make install
+          ls -l inst/bin/dot_static
+          strip inst/bin/dot_static
+          ls -l inst/bin/dot_static
+
+
