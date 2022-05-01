@@ -37,7 +37,7 @@ jobs:
           strip inst/bin/dot_static
           ls -l inst/bin/dot_static
           mkdir -p ../src/graphviz_bin/bin
-          cp inst_bin/dot_static ../src/graphviz_bin/bin/dot
+          cp inst/bin/dot_static ../src/graphviz_bin/bin/dot
       - name: Wheel build
         run: |
           /opt/python/${{ matrix.python-abi }}/bin/python \
