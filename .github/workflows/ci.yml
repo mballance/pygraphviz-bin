@@ -19,6 +19,7 @@ jobs:
           find /opt/python/${{ matrix.python-abi }} -type f
           ls /opt/python/${{ matrix.python-abi }}/bin
           /opt/python/${{ matrix.python-abi }}/bin/python -m pip install --upgrade pip setuptools wheel build cython
+          yum install -y wget
       - name: Fetch GraphViz sources
         run: |
           wget https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/3.0.0/graphviz-3.0.0.tar.gz
