@@ -24,14 +24,18 @@ jobs:
           yum install -y wget
       - name: Fetch GraphViz sources
         run: |
-          wget https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/3.0.0/graphviz-3.0.0.tar.gz
+          wget -q https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/3.0.0/graphviz-3.0.0.tar.gz
       - name: Configure and build
         run: |
-          tar xvzf graphviz-3.0.0.tar.gz
+          tar xzf graphviz-3.0.0.tar.gz
           cd graphviz-3.0.0
           ./configure --prefix=`pwd`/inst \
             --enable-static --disable-shared \
-            --disable-xlib --disable-x
+            --disable-xlib --disable-x \
+            --without-xlib --without-x \
+            --without-expat --disable-expat \
+            --without-swig --disable-swig \
+            --without-visio --disable-visio
           make > build.log 2>&1
           make install > install.log 2>&1
           ls -l inst/bin/dot_static
@@ -41,6 +45,7 @@ jobs:
           mkdir -p ../src/graphviz_bin/bin
           mkdir ../result
           cp inst/bin/dot_static ../result/dot
+          cp inst/bin/dot_static ../src/graphviz_bin/dot
       - name: Wheel build
         run: |
           export BUILD_NUM=$GITHUB_RUN_ID
