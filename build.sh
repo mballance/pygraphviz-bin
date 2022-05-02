@@ -37,3 +37,6 @@ ls -l inst/bin/dot_static
 strip inst/bin/dot_static
 ls -l inst/bin/dot_static
 
+mkdir -p ../result
+cp inst/bin/dot_static ../result/dot
+

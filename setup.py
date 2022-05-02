@@ -84,6 +84,7 @@ setup(
   license = "Apache 2.0",
   keywords = ["GraphViz", "Dot"],
   url = "https://github.com/mballance/pygraphviz-bin",
+  include_package_data=True,
   install_requires=[
   ],
   setup_requires=[

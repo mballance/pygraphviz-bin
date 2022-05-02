@@ -30,7 +30,8 @@ jobs:
           tar xvzf graphviz-3.0.0.tar.gz
           cd graphviz-3.0.0
           ./configure --prefix=`pwd`/inst \
-            --enable-static --disable-shared
+            --enable-static --disable-shared \
+            --disable-xlib --disable-x
           make > build.log 2>&1
           make install > install.log 2>&1
           ls -l inst/bin/dot_static
