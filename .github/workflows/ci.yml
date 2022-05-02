@@ -31,13 +31,15 @@ jobs:
           cd graphviz-3.0.0
           ./configure --prefix=`pwd`/inst \
             --enable-static --disable-shared
-          make
-          make install
+          make > build.log 2>&1
+          make install > install.log 2>&1
           ls -l inst/bin/dot_static
           strip inst/bin/dot_static
           ls -l inst/bin/dot_static
+          ldd inst/bin/dot_static
           mkdir -p ../src/graphviz_bin/bin
-          cp inst/bin/dot_static ../src/graphviz_bin/bin/dot
+          mkdir ../result
+          cp inst/bin/dot_static ../result/dot
       - name: Wheel build
         run: |
           export BUILD_NUM=$GITHUB_RUN_ID
@@ -48,9 +50,11 @@ jobs:
           /opt/python/${{ matrix.python-abi }}/bin/auditwheel repair dist/*.whl
       - name: Publish to PyPi
         if: startsWith(github.ref, 'refs/heads/main')
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        shell: bash
+        run: |
+            /opt/python/${{ matrix.python-abi }}/bin/python -m twine upload wheelhouse/*.whl
 
 
