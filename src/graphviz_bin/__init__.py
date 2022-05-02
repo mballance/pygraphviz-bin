@@ -8,7 +8,7 @@ import os
 def dot(args, in_s=None, out_s=None):
     pkg_dir=os.path.dirname(os.path.abspath(__file__))
     
-    dot_bin=os.path.join(pkg_dir, "bin", "dot")
+    dot_bin=os.path.join(pkg_dir, "dot")
     
     if not os.path.isfile(dot_bin):
         raise Exception("Failed to find dot")
